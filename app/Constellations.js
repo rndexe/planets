@@ -11,7 +11,7 @@ const line_material = new LineBasicMaterial({
     opacity: 0.2,
 });
 
-export function createStars() {
+export function createStars(radius) {
     const group = new Group();
     for (const [name, constellation] of Object.entries(constellations)) {
         const stars_array = [];
@@ -22,7 +22,7 @@ export function createStars() {
 
             const v = new Vector3();
 
-            stars_array.push(v.setFromSphericalCoords(50, degToRad(pos_ecl.elat - 90), degToRad(pos_ecl.elon)));
+            stars_array.push(v.setFromSphericalCoords(radius, degToRad(pos_ecl.elat - 90), degToRad(pos_ecl.elon)));
         }
 
         const geom = new BufferGeometry().setFromPoints(stars_array);

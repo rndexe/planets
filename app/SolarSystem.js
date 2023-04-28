@@ -2,6 +2,8 @@ import { GeoVector, Ecliptic } from "astronomy-engine";
 import { Group, SphereGeometry, MeshBasicMaterial, Mesh } from "three";
 import { bodies } from "./constants";
 import { degToRad } from "three/src/math/MathUtils";
+import SpriteText from "three-spritetext";
+
 const geometry = new SphereGeometry(1);
 
 export function createBodies() {
@@ -9,9 +11,20 @@ export function createBodies() {
 
     for (const body of bodies) {
         const material = new MeshBasicMaterial({ color: body.color });
-        body.mesh = new Mesh(geometry, material);
-        body.mesh.scale.setScalar(body.scale / 2);
-        group.add(body.mesh);
+        const mesh = new Mesh(geometry, material);
+        const sprite = new SpriteText(body.name,0.5);
+
+        sprite.material.sizeAttenuation = false;
+        sprite.textHeight = 0.015
+        sprite.fontFace = "Courier New"
+        sprite.backgroundColor = 'rgba(0,0,0,0.5)';
+    
+        mesh.scale.setScalar(body.scale);
+
+        group.add(mesh);
+        group.add(sprite);
+        body.mesh = mesh;
+        body.sprite = sprite;
     }
     return group;
 }
@@ -21,9 +34,14 @@ export function setPositions(time) {
         const position = Ecliptic(GeoVector(body.name, time, false));
         body.position = position;
         body.mesh.position.setFromSphericalCoords(
-            body.distance * 2.5,
+            body.distance * 5,
             degToRad(position.elat - 90),
             degToRad(position.elon)
+        );
+        body.sprite.position.set(
+            body.mesh.position.x,
+            body.mesh.position.y + body.scale + 0.5,
+            body.mesh.position.z
         );
     }
 }

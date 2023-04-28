@@ -1,21 +1,26 @@
 <script>
-    import { init } from "./app/world";
+    import { createSections, init } from "./app/world";
     import { createBodies, setPositions } from "./app/SolarSystem";
     import { createStars } from "./app/Constellations";
-    let time = 0;
+    let t = 0;
 
-    const { renderer, scene, camera } = init();
+    const { renderer, scene, camera, stats } = init();
+    const radius = 75;
 
-    const group1 = createBodies();
-    const group2 = createStars();
+    const groups = [];
+    groups.push(createBodies());
+    groups.push(createStars(radius));
+    //groups.push(createSections(radius));
+    groups.forEach((group) => scene.add(group));
 
     setPositions(new Date());
-    scene.add(group1);
-    scene.add(group2);
 
     function animate() {
+        //setPositions(t);
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
+        //t += 1;
+        stats.update();
     }
 
     animate();
