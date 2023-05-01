@@ -2,7 +2,7 @@ import { GeoVector, Ecliptic } from "astronomy-engine";
 import { Group, SphereGeometry, MeshBasicMaterial, Mesh } from "three";
 import { bodies } from "./constants";
 import { degToRad } from "three/src/math/MathUtils";
-import SpriteText from "three-spritetext";
+import { createText, line_material } from "./utils";
 
 const geometry = new SphereGeometry(1);
 
@@ -12,13 +12,8 @@ export function createBodies() {
     for (const body of bodies) {
         const material = new MeshBasicMaterial({ color: body.color });
         const mesh = new Mesh(geometry, material);
-        const sprite = new SpriteText(body.name,0.5);
+        const sprite = createText(body.name);
 
-        sprite.material.sizeAttenuation = false;
-        sprite.textHeight = 0.015
-        sprite.fontFace = "Courier New"
-        sprite.backgroundColor = 'rgba(0,0,0,0.5)';
-    
         mesh.scale.setScalar(body.scale);
 
         group.add(mesh);
@@ -38,10 +33,6 @@ export function setPositions(time) {
             degToRad(position.elat - 90),
             degToRad(position.elon)
         );
-        body.sprite.position.set(
-            body.mesh.position.x,
-            body.mesh.position.y + body.scale + 0.5,
-            body.mesh.position.z
-        );
+        body.sprite.position.set(body.mesh.position.x, body.mesh.position.y + body.scale + 0.5, body.mesh.position.z);
     }
 }

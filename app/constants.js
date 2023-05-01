@@ -397,4 +397,7 @@ export const constellations = {
             [2, 9],
         ],
     },
+    Equinox: {
+        stars:[[0,0,0,0]]
+    }
 };

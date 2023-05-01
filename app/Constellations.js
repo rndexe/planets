@@ -1,15 +1,8 @@
 import { Spherical, VectorFromSphere, Ecliptic } from "astronomy-engine";
 import { constellations } from "./constants";
-import { PointsMaterial, Vector3, BufferGeometry, Points, Group, LineSegments, LineBasicMaterial } from "three";
+import { Vector3, BufferGeometry, Points, Group, LineSegments } from "three";
 import { degToRad } from "three/src/math/MathUtils";
-
-const material = new PointsMaterial({ color: 0xffffff, size: 0.3 });
-const line_material = new LineBasicMaterial({
-    color: 0xffffff,
-    linewidth: 1,
-    transparent: true,
-    opacity: 0.2,
-});
+import { line_material_2, pts_material, pts_material_red } from "./utils";
 
 export function createStars(radius) {
     const group = new Group();
@@ -26,12 +19,20 @@ export function createStars(radius) {
         }
 
         const geom = new BufferGeometry().setFromPoints(stars_array);
-        geom.setIndex(constellation.lines.flat());
-        const points = new Points(geom, material);
-        const lines = new LineSegments(geom, line_material);
+        let points;
+        if (constellation.lines) {
+            geom.setIndex(constellation.lines.flat());
+            points = new Points(geom, pts_material);
+            const lines = new LineSegments(geom, line_material_2);
+            group.add(lines);
+        } else {
+            points = new Points(geom, pts_material_red);
+        }
         group.add(points);
-        group.add(lines);
     }
+
+    group.matrixAutoUpdate = false;
+    group.matrixWorldAutoUpdate = false;
     return group;
 }
 
