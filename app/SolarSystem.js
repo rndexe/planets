@@ -12,7 +12,7 @@ export function createBodies() {
     const group = new Group();
 
     for (const body of bodies) {
-        const material = new MeshBasicMaterial({ map: textureLoader.load(`textures/${body.texture}.jpg`) });
+        const material = new MeshBasicMaterial({ map: textureLoader.load(`${import.meta.env.BASE_URL}/textures/${body.texture}.jpg`) });
         const mesh = new Mesh(geometry, material);
         mesh.scale.setScalar(body.scale);
 
