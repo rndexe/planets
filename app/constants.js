@@ -1,69 +1,90 @@
+export const radius = 75;
+
 export const bodies = [
     {
         name: "Sun",
-        scale: 4,
+        scale: 3,
         color: 0xffff00,
-        distance: 3,
+        texture : "sun",
+        distance: 4,
     },
     {
         name: "Moon",
-        scale: 0.6,
+        scale: 1,
         color: 0x343434,
-        distance: 0.5,
-    },
-    {
-        name: "Mercury",
-        scale: 0.5,
-        color: 0xfafafa,
+        texture : "moon",
         distance: 1,
     },
     {
+        name: "Mercury",
+        scale: 1,
+        color: 0xfafafa,
+        distance: 2,
+        texture : "2k_mercury",
+
+    },
+    {
         name: "Venus",
-        scale: 0.87,
+        scale: 2,
         color: 0x85a4a3,
-        distance: 1.5,
+        distance: 3,
+        texture : "2k_venus_atmosphere",
+
     },
     {
         name: "Earth",
-        scale: 0.87,
+        scale: 2,
         color: 0x0000ff,
         distance: 0,
+        texture: "earth"
     },
     {
         name: "Mars",
-        scale: 0.81,
+        scale: 2,
         color: 0xb22e20,
-        distance: 4.5,
+        distance: 5,
+        texture: "2k_mars"
+
     },
     {
         name: "Jupiter",
-        scale: 2,
+        scale: 2.5,
         color: 0xc99039,
         distance: 6,
+        texture: "2k_jupiter"
+
     },
     {
         name: "Saturn",
-        scale: 1.8,
+        scale: 2.5,
         color: 0xfde522,
         distance: 7,
+        texture: "2k_saturn"
+
     },
     {
         name: "Uranus",
-        scale: 1.5,
+        scale: 2.5,
         color: 0xfafafa,
         distance: 8,
+        texture: "2k_uranus"
+
     },
     {
         name: "Neptune",
-        scale: 1.5,
+        scale: 2.5,
         color: 0xafbbc2,
         distance: 9,
+        texture: "2k_neptune"
+
     },
     {
         name: "Pluto",
-        scale: 0.5,
+        scale: 1,
         color: 0xfafafa,
         distance: 10,
+        texture: "pluto"
+
     },
 ];
 

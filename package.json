@@ -6,8 +6,8 @@
   },
   "dependencies": {
     "astronomy-engine": "^2.1.17",
-    "three": "^0.151.3",
-    "three-spritetext": "^1.8.0"
+    "gsap": "^3.11.5",
+    "three": "^0.151.3"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.1.0",

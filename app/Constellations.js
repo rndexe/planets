@@ -1,10 +1,10 @@
 import { Spherical, VectorFromSphere, Ecliptic } from "astronomy-engine";
-import { constellations } from "./constants";
+import { constellations, radius } from "./constants";
 import { Vector3, BufferGeometry, Points, Group, LineSegments } from "three";
 import { degToRad } from "three/src/math/MathUtils";
-import { line_material_2, pts_material, pts_material_red } from "./utils";
+import { line_material, pts_material, pts_material_red } from "./utils";
 
-export function createStars(radius) {
+export function createStars() {
     const group = new Group();
     for (const [name, constellation] of Object.entries(constellations)) {
         const stars_array = [];
@@ -23,7 +23,7 @@ export function createStars(radius) {
         if (constellation.lines) {
             geom.setIndex(constellation.lines.flat());
             points = new Points(geom, pts_material);
-            const lines = new LineSegments(geom, line_material_2);
+            const lines = new LineSegments(geom, line_material);
             group.add(lines);
         } else {
             points = new Points(geom, pts_material_red);

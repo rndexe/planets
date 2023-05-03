@@ -1,23 +1,11 @@
-import SpriteText from "three-spritetext";
 import { LineBasicMaterial, PointsMaterial } from "three";
 import { degToRad } from "three/src/math/MathUtils";
 
-export function createText(text) {
-    const sprite = new SpriteText(text, 0.5);
-
-    sprite.material.sizeAttenuation = false;
-    sprite.textHeight = 0.015;
-    sprite.fontFace = "Courier New";
-    sprite.backgroundColor = "rgba(0,0,0,0.5)";
-
-    return sprite;
-}
-
 export const line_material = new LineBasicMaterial({
-    color: 0xffffff,
+    color: 0x0c4a6e,
     linewidth: 1,
     transparent: true,
-    opacity: 0.2,
+    opacity: 0.5,
 });
 
 export const line_material_2 = new LineBasicMaterial({

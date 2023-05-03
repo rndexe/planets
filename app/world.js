@@ -1,23 +1,25 @@
-import { EllipseCurve, Group, Line, LineSegments, Path, PerspectiveCamera, Vector3, WebGLRenderer } from "three";
-import { Scene, AxesHelper, BufferGeometry } from "three";
+import { PerspectiveCamera, WebGLRenderer } from "three";
+import { Scene, PolarGridHelper } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer";
 import Stats from "three/addons/libs/stats.module.js";
-import { line_material, line_material_red } from "./utils";
-import { cos_30, cos_60, sin_30, sin_60 } from "./utils";
+import { radius } from "./constants";
 
 function createScene() {
     const scene = new Scene();
-    const axesHelper = new AxesHelper(10);
-    //scene.add(axesHelper);
+    //const axesHelper = new AxesHelper(10);
+    const sections = new PolarGridHelper(radius, 12, 1, 32, 0x444444, 0x444444)
+    scene.add(sections);
     return scene;
 }
 function init() {
     const renderer = createRenderer();
+    const css_renderer = createCSSRenderer();
     const camera = createCamera();
     const scene = createScene();
-    const controls = createControls(camera, renderer);
+    const controls = createControls(camera, css_renderer);
     const stats = createStats();
-    return { renderer, scene, camera, controls, stats };
+    return { renderer, css_renderer, scene, camera, controls, stats };
 }
 
 function createStats() {
@@ -30,12 +32,22 @@ function createStats() {
 }
 function createCamera() {
     const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 1000);
-    camera.position.y = 200;
+    camera.position.setFromSphericalCoords(radius*2, Math.PI/4, 0);
+
+    camera.layers.enableAll();
     return camera;
 }
 function createRenderer() {
     const renderer = new WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById("app").appendChild(renderer.domElement);
+    return renderer;
+}
+function createCSSRenderer() {
+    const renderer = new CSS2DRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.domElement.style.position = "absolute";
+    renderer.domElement.style.top = "0px";
     document.getElementById("app").appendChild(renderer.domElement);
     return renderer;
 }
@@ -45,50 +57,9 @@ function createControls(camera, renderer) {
     //controls.enableDamping = true
     return controls;
 }
-function createSections(radius) {
-    const group = new Group();
 
-    const array = [
-        new Vector3(radius, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, -radius),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 0, radius),
-        new Vector3(0, 0, 0),
-        new Vector3(-radius, 0, 0),
-        new Vector3(0, 0, 0),
-        new Vector3(radius * cos_60, 0, radius * sin_60),
-        new Vector3(0, 0, 0),
-        new Vector3(-radius * cos_60, 0, -radius * sin_60),
-        new Vector3(0, 0, 0),
-        new Vector3(-radius * cos_60, 0, radius * sin_60),
-        new Vector3(0, 0, 0),
-        new Vector3(radius * cos_60, 0, -radius * sin_60),
-        new Vector3(0, 0, 0),
-        new Vector3(radius * cos_30, 0, radius * sin_30),
-        new Vector3(0, 0, 0),
-        new Vector3(-radius * cos_30, 0, -radius * sin_30),
-        new Vector3(0, 0, 0),
-        new Vector3(-radius * cos_30, 0, radius * sin_30),
-        new Vector3(0, 0, 0),
-        new Vector3(radius * cos_30, 0, -radius * sin_30),
-        new Vector3(0, 0, 0),
-    ];
-
-    const path = new EllipseCurve(0, 0, radius, radius);
-    const points = path.getPoints(50);
-
-    const geom = new BufferGeometry().setFromPoints(array);
-    const geom2 = new BufferGeometry().setFromPoints(points);
-
-    const lines = new LineSegments(geom, line_material);
-    const ellipse = new Line(geom2, line_material);
-    ellipse.rotateX(Math.PI / 2);
-
-    group.add(lines);
-    group.add(ellipse);
-    group.matrixAutoUpdate = false;
-    group.matrixWorldAutoUpdate = false;
-    return group;
+export function render(renderer, css_renderer, scene, camera) {
+    renderer.render(scene, camera);
+    css_renderer.render(scene, camera);
 }
-export { createCamera, createScene, createRenderer, createControls, createSections, init };
+export { createCamera, createScene, createRenderer, createControls, init };

@@ -1,55 +1,62 @@
 <script>
-    import { createSections, init } from "./app/world";
+    import { init, render } from "./app/world";
     import { createBodies, setPositions } from "./app/SolarSystem";
     import { createStars } from "./app/Constellations";
     import { splitDate, getDateFromArray } from "./app/utils";
+    import { DefaultLoadingManager } from "three";
+    import { slide } from "svelte/transition";
+
+    let loaded = false;
+
+    const { renderer, css_renderer, scene, camera, stats, controls } = init();
+
+    scene.add(createBodies());
+    scene.add(createStars());
 
     let t = new Date();
     let date = [];
-
     date = splitDate(t);
-
-    const { renderer, scene, camera, stats, controls } = init();
-    const radius = 75;
-
-    const groups = [];
-    groups.push(createBodies());
-    groups.push(createStars(radius));
-    groups.push(createSections(radius));
-    groups.forEach((group) => scene.add(group));
-
     setPositions(t);
-
-    renderer.render(scene, camera);
-
-    function animate() {
-        requestAnimationFrame(animate);
-        stats.update();
-    }
-
-    animate();
+    updateStats();
 
     $: {
         t = getDateFromArray(date).t;
         const dateString = date[0] + "-" + date[1] + "-" + date[2];
         if (t > 0 && dateString === getDateFromArray(date).t_str) {
             setPositions(t);
-            renderer.render(scene, camera);
+            render(renderer, css_renderer, scene, camera);
         }
     }
 
+    DefaultLoadingManager.onLoad = function () {
+        console.log("Loading Complete!");
+        setTimeout(() => {
+            loaded = true;
+        }, 1000);
+        render(renderer, css_renderer, scene, camera);
+    };
+
+    function updateStats() {
+        requestAnimationFrame(updateStats);
+        stats.update();
+    }
+
     controls.addEventListener("change", () => {
-        renderer.render(scene, camera);
+        render(renderer, css_renderer, scene, camera);
     });
 
     const handleResize = () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        css_renderer.setSize(window.innerWidth, window.innerHeight);
     };
 </script>
 
 <svelte:window on:resize={handleResize} />
+{#if !loaded}
+    <section id="loading-screen" out:slide={{ y: -1000, duration: 2000 }} />
+{/if}
 <div class="bottom-left">
     <input class="short-num" type="number" required max="31" min="1" bind:value={date[0]} /><span>/</span>
     <input class="short-num" type="number" required max="12" min="1" bind:value={date[1]} /><span>/</span>
@@ -88,5 +95,14 @@
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
         appearance: none;
+    }
+    #loading-screen {
+        position: absolute;
+        z-index: 200;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
     }
 </style>
