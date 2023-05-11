@@ -7,7 +7,6 @@ import { radius } from "./constants";
 
 function createScene() {
     const scene = new Scene();
-    //const axesHelper = new AxesHelper(10);
     const sections = new PolarGridHelper(radius, 12, 1, 32, 0x444444, 0x444444)
     scene.add(sections);
     return scene;
@@ -18,18 +17,9 @@ function init() {
     const camera = createCamera();
     const scene = createScene();
     const controls = createControls(camera, css_renderer);
-    const stats = createStats();
-    return { renderer, css_renderer, scene, camera, controls, stats };
+    return { renderer, css_renderer, scene, camera, controls };
 }
 
-function createStats() {
-    const stats = new Stats();
-    stats.domElement.style.position = "absolute";
-    stats.domElement.style.bottom = "0px";
-    stats.domElement.style.zIndex = 100;
-    document.getElementById("app").appendChild(stats.domElement);
-    return stats;
-}
 function createCamera() {
     const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 1000);
     camera.position.setFromSphericalCoords(radius*2, Math.PI/4, 0);

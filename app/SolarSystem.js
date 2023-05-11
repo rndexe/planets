@@ -1,11 +1,12 @@
 import { GeoVector, Ecliptic } from "astronomy-engine";
-import { Group, SphereGeometry, MeshBasicMaterial, Mesh, TextureLoader } from "three";
+import { Group, SphereGeometry, RingGeometry, MeshBasicMaterial, Mesh, TextureLoader } from "three";
 import { bodies } from "./constants";
 import { degToRad } from "three/src/math/MathUtils";
 
 import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer";
 
 const geometry = new SphereGeometry(1, 16, 16);
+const circle_geometry = new RingGeometry(1.2, 2, 32);
 const textureLoader = new TextureLoader();
 
 export function createBodies() {
@@ -14,6 +15,13 @@ export function createBodies() {
     for (const body of bodies) {
         const material = new MeshBasicMaterial({ map: textureLoader.load(`textures/${body.texture}.jpg`) });
         const mesh = new Mesh(geometry, material);
+
+        if (body.name == "Saturn") {
+            mesh.add(
+                new Mesh(circle_geometry.rotateX(degToRad(63)), new MeshBasicMaterial({ side: 2, color: 0xcfc0a2 }))
+            );
+        }
+
         mesh.scale.setScalar(body.scale);
 
         const div = document.createElement("div");

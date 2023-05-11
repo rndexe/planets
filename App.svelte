@@ -7,8 +7,7 @@
     import { slide } from "svelte/transition";
 
     let loaded = false;
-
-    const { renderer, css_renderer, scene, camera, stats, controls } = init();
+    const { renderer, css_renderer, scene, camera, controls } = init();
 
     scene.add(createBodies());
     scene.add(createStars());
@@ -17,7 +16,6 @@
     let date = [];
     date = splitDate(t);
     setPositions(t);
-    updateStats();
 
     $: {
         t = getDateFromArray(date).t;
@@ -35,11 +33,6 @@
         }, 1000);
         render(renderer, css_renderer, scene, camera);
     };
-
-    function updateStats() {
-        requestAnimationFrame(updateStats);
-        stats.update();
-    }
 
     controls.addEventListener("change", () => {
         render(renderer, css_renderer, scene, camera);
