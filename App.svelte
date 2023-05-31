@@ -26,6 +26,13 @@
         }
     }
 
+    function animate() {
+        requestAnimationFrame(animate);
+        render(renderer, css_renderer, scene, camera);
+    }
+
+    animate();
+
     DefaultLoadingManager.onLoad = function () {
         console.log("Loading Complete!");
         setTimeout(() => {
@@ -60,7 +67,9 @@
     .bottom-left {
         position: absolute;
         bottom: 1rem;
-        left: 1rem;
+        inset-inline: 0;
+        width: fit-content;
+        margin: auto;
         z-index: 100;
         color: white;
         font-size: 2rem;

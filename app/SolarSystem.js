@@ -1,7 +1,8 @@
 import { GeoVector, Ecliptic } from "astronomy-engine";
-import { Group, SphereGeometry, RingGeometry, MeshBasicMaterial, Mesh, TextureLoader } from "three";
+import { Group, SphereGeometry, RingGeometry, MeshBasicMaterial, Mesh, TextureLoader, Vector3 } from "three";
 import { bodies } from "./constants";
 import { degToRad } from "three/src/math/MathUtils";
+import { gsap } from "gsap";
 
 import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer";
 
@@ -43,12 +44,13 @@ export function setPositions(time) {
     for (const body of bodies) {
         const position = Ecliptic(GeoVector(body.name, time, false));
         body.position = position;
-        body.mesh.position.setFromSphericalCoords(
-            body.distance * 6.5,
-            degToRad(position.elat - 90),
-            degToRad(position.elon)
-        );
-        //body.sprite.position.set(body.mesh.position.x, body.mesh.position.y + body.scale + 0.5, body.mesh.position.z);
-        //body.label.position.set(0, body.scale + 0.5, 0);
+        const spherical = new Vector3();
+        spherical.setFromSphericalCoords(body.distance * 6.5, degToRad(position.elat - 90), degToRad(position.elon));
+        gsap.to(body.mesh.position, {
+            x: spherical.x,
+            y: spherical.y,
+            z: spherical.z,
+            duration: 1,
+        });
     }
 }

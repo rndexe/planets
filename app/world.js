@@ -2,7 +2,6 @@ import { PerspectiveCamera, WebGLRenderer } from "three";
 import { Scene, PolarGridHelper } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer";
-import Stats from "three/addons/libs/stats.module.js";
 import { radius } from "./constants";
 
 function createScene() {
