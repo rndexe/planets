@@ -23,8 +23,8 @@ export const line_material_red = new LineBasicMaterial({
 });
 
 export function splitDate(time) {
-    const date = time.getDate();
-    const month = time.getMonth() + 1;
+    const date = ('0' + time.getDate()).slice(-2);
+    const month = ('0'+ (time.getMonth() + 1)).slice(-2);
     const year = time.getFullYear();
     return [date, month, year];
 }

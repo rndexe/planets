@@ -72,11 +72,11 @@
         margin: auto;
         z-index: 100;
         color: white;
-        font-size: 2rem;
-        font-family: "Courier New", Courier, monospace;
+        font-size: 1.5rem;
     }
     input[type="number"] {
-        font-size: 2rem;
+        font-family: monospace;
+        font-size: 1.5rem;
         background-color: transparent;
         color: white;
         padding: 0;
